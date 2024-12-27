@@ -1,4 +1,5 @@
 import pygame
+import random
 
 #Setup Pygame
 pygame.init()
@@ -14,8 +15,20 @@ player_size = 20
 grid_size = player_size*2
 grid_color = "dark green"
 
+apple_exists = False
+apple_pos = pygame.Vector2()
+apple_color = "red"
+
 #For some logic later done, positing for up/right, negative for left/down
 direction = 1
+
+#create a method to spawn apples
+def spawnApple():
+    global apple_pos, apple_exists
+    x_pos = random.randint(0, width // 40)
+    y_pos = random.randint(0, height // 40)
+    apple_pos = pygame.Vector2(x_pos * 40 + 20, y_pos * 40 + 20)
+    apple_exists = True
 
 #Start the game logic here
 while running:
@@ -24,6 +37,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    if not apple_exists:
+        spawnApple()
 
     #Fill screen with color to wipe away things from last frame
     screen.fill("forest green")
@@ -35,6 +51,7 @@ while running:
 
     #Render game here
     pygame.draw.circle(screen, "salmon", player_pos, player_size)
+    pygame.draw.circle(screen, apple_color, apple_pos, player_size)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
@@ -67,7 +84,7 @@ while running:
             player_pos.x += player_size * direction
     if player_pos.y % player_size != 0:
         player_pos.y = round(player_pos.y/player_size)*player_size
-        if player_pos.y % grid_size ==0:
+        if player_pos.y % grid_size == 0:
             player_pos.y += player_size * direction
 
     #flip() display to put work on screen
