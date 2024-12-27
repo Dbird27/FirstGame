@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 #Setup Pygame
 pygame.init()
@@ -11,16 +12,18 @@ dt = 0
 
 player_pos = pygame.Vector2(screen.get_width() / 2 , screen.get_height() / 2)
 player_size = 20
+player_speed = 60
 
 grid_size = player_size*2
 grid_color = "dark green"
 
 apple_exists = False
-apple_pos = pygame.Vector2()
+apple_pos = pygame.Vector2(0,0)
 apple_color = "red"
 
 #For some logic later done, positing for up/right, negative for left/down
 direction = 1
+score = 0
 
 #create a method to spawn apples
 def spawnApple():
@@ -37,6 +40,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    
+    if player_pos == apple_pos:
+        apple_exists = False
+        score +=1
+        print(score)
 
     if not apple_exists:
         spawnApple()
@@ -55,16 +63,16 @@ while running:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        player_pos.y -= 60 * dt
+        player_pos.y -= player_speed * dt
         direction = -1
     if keys[pygame.K_s]:
-        player_pos.y += 60 * dt
+        player_pos.y += player_speed * dt
         direction = 1
     if keys[pygame.K_a]:
-        player_pos.x -= 60 * dt
+        player_pos.x -= player_speed * dt
         direction = -1
     if keys[pygame.K_d]:
-        player_pos.x += 60 * dt
+        player_pos.x += player_speed * dt
         direction = 1
 
     #Force player to stay on screen
