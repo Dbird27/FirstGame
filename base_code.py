@@ -64,22 +64,27 @@ while running:
     keys = pygame.key.get_pressed()
     new_head = copy.copy(snake_head)
     if keys[pygame.K_w]:
-        new_head.y -= grid_size
-        direction = "up"
-        player_move=True
+        if direction != "down":
+            new_head.y -= grid_size
+            direction = "up"
+            player_move=True
     elif keys[pygame.K_s]:
-        new_head.y += grid_size
-        direction = "down"
-        player_move=True
+        if direction != "up":
+            new_head.y += grid_size
+            direction = "down"
+            player_move=True
     elif keys[pygame.K_a]:
-        new_head.x -= grid_size
-        direction = "left"
-        player_move=True
+        if direction != "right":
+            new_head.x -= grid_size
+            direction = "left"
+            player_move=True
     elif keys[pygame.K_d]:
-        new_head.x += grid_size
-        direction = "right"
-        player_move=True
-    else:
+        if direction != "down":
+            new_head.x += grid_size
+            direction = "right"
+            player_move=True
+    
+    if not player_move:
         wait_count+=1
 
     #Handle snake moving on it's own
@@ -128,7 +133,7 @@ while running:
     #Render game here, aswell as Set second condition for player loss, hitting themselves
     for index,part in enumerate(player_character):
         pygame.draw.circle(screen, "salmon", part, player_size)
-        if (part.x == snake_head.x) and (part.y == snake_head.y) and index>1:
+        if part == snake_head and index>1:
             player_loss = True
     pygame.draw.circle(screen, apple_color, apple_pos, player_size)
 
