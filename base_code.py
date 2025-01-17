@@ -17,6 +17,9 @@ player_pos = pygame.Vector2(screen.get_width() / 2 , screen.get_height() / 2)
 player_size = 20
 player_character = [player_pos]
 snake_head = player_pos
+player_loss = False
+
+loss_screen = pygame.Rect(0,0,screen.get_width(),screen.get_height())
 
 grid_size = player_size*2
 grid_color = "dark green"
@@ -99,15 +102,20 @@ while running:
         snake_head = player_character[0]
 
 
-    #Force player to stay on screen
+    #Force player to stay on screen, also first lose condition
     if snake_head.x > width - player_size:
         snake_head.x = width - player_size
+        player_loss = True
     if snake_head.x < player_size:
         snake_head.x = player_size
+        player_loss = True
     if snake_head.y > height - player_size:
         snake_head.y = height - player_size
+        player_loss = True
     if snake_head.y < player_size:
         snake_head.y = player_size
+        player_loss = True
+    #Handle player loss:    
 
     #Fill screen with color to wipe away things from last frame
     screen.fill("forest green")
@@ -117,11 +125,16 @@ while running:
     for y in range(0, height, grid_size):
         pygame.draw.line(screen, grid_color, (0,y), (width, y))
 
-    #Render game here
-    for part in player_character:
+    #Render game here, aswell as Set second condition for player loss, hitting themselves
+    for index,part in enumerate(player_character):
         pygame.draw.circle(screen, "salmon", part, player_size)
+        if (part.x == snake_head.x) and (part.y == snake_head.y) and index>1:
+            player_loss = True
     pygame.draw.circle(screen, apple_color, apple_pos, player_size)
 
+    if player_loss:
+        pygame.draw.ellipse(screen, "red", loss_screen,0)
+        running = False
     #flip() display to put work on screen
     pygame.display.flip()
 
