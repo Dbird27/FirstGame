@@ -5,6 +5,7 @@ import time
 
 #Setup Pygame
 pygame.init()
+pygame.font.init()
 width,height = 1320, 760
 screen = pygame.display.set_mode((width,height))
 clock = pygame.time.Clock()
@@ -28,6 +29,7 @@ apple_exists = False
 apple_pos = pygame.Vector2(0,0)
 apple_color = "red"
 
+my_font = pygame.font.SysFont('Comic Sans MS',250)
 #For some logic later down, positing for up/right, negative for left/down
 direction =""
 score = 0
@@ -139,10 +141,13 @@ while running:
 
     if player_loss:
         pygame.draw.ellipse(screen, "red", loss_screen,0)
+        text_surface = my_font.render("You lose",False,"blue")
+        screen.blit(text_surface,(screen.get_width()/8,screen.get_height()/4))
         running = False
     #flip() display to put work on screen
     pygame.display.flip()
 
     clock.tick(10) #Limits FPS to 60.
 
+time.sleep(5)
 pygame.quit()
