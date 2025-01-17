@@ -10,6 +10,7 @@ screen = pygame.display.set_mode((width,height))
 clock = pygame.time.Clock()
 running = True
 dt = 0
+move_speed = 4
 
 player_move = False
 player_pos = pygame.Vector2(screen.get_width() / 2 , screen.get_height() / 2)
@@ -75,19 +76,21 @@ while running:
         new_head.x += grid_size
         direction = "right"
         player_move=True
-    #else:
-    #    wait_count+=1
+    else:
+        wait_count+=1
 
     #Handle snake moving on it's own
-    #if wait_count == 2:
-    #    if direction == "up":
-    #        new_head.y -= grid_size
-    #    elif direction == "down":
-    #        new_head.y += grid_size
-    #    elif direction == "left":
-    #        new_head.x -= grid_size
-    #    else:
-    #        new_head.x += grid_size
+    if wait_count == move_speed:
+        wait_count = 0
+        player_move=True
+        if direction == "up":
+            new_head.y -= grid_size
+        elif direction == "down":
+            new_head.y += grid_size
+        elif direction == "left":
+            new_head.x -= grid_size
+        else:
+            new_head.x += grid_size
     
 
     #Update player character
