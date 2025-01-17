@@ -11,6 +11,7 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
+player_move = False
 player_pos = pygame.Vector2(screen.get_width() / 2 , screen.get_height() / 2)
 player_size = 20
 player_character = [player_pos]
@@ -48,8 +49,9 @@ while running:
         apple_exists = False
         score +=1
         print(score)
-    else:
+    elif player_move:
         player_character.pop()
+        player_move = False
 
     if not apple_exists:
         spawnApple()
@@ -60,33 +62,39 @@ while running:
     if keys[pygame.K_w]:
         new_head.y -= grid_size
         direction = "up"
+        player_move=True
     elif keys[pygame.K_s]:
         new_head.y += grid_size
         direction = "down"
+        player_move=True
     elif keys[pygame.K_a]:
         new_head.x -= grid_size
         direction = "left"
+        player_move=True
     elif keys[pygame.K_d]:
         new_head.x += grid_size
         direction = "right"
-    else:
-        wait_count+=1
+        player_move=True
+    #else:
+    #    wait_count+=1
 
     #Handle snake moving on it's own
-    if wait_count == 2:
-        if direction == "up":
-            new_head.y -= grid_size
-        elif direction == "down":
-            new_head.y += grid_size
-        elif direction == "left":
-            new_head.x -= grid_size
-        else:
-            new_head.x += grid_size
+    #if wait_count == 2:
+    #    if direction == "up":
+    #        new_head.y -= grid_size
+    #    elif direction == "down":
+    #        new_head.y += grid_size
+    #    elif direction == "left":
+    #        new_head.x -= grid_size
+    #    else:
+    #        new_head.x += grid_size
     
 
     #Update player character
-    player_character.insert(0,new_head)
-    snake_head = player_character[0]
+    if player_move:
+        player_character.insert(0,new_head)
+        snake_head = player_character[0]
+
 
     #Force player to stay on screen
     if snake_head.x > width - player_size:
